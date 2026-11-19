@@ -16,6 +16,9 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     fonts-noto-core \
     python3 \
     python3-pip \
+    python3-dev \
+    gcc \
+    libc6-dev \
     python3-cryptography \
     python3-libtorrent \
     python3-requests \
@@ -25,6 +28,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     && curl -sL --connect-timeout 15 --max-time 90 https://github.com/YouROK/TorrServer/releases/download/MatriX.148/TorrServer-linux-amd64 -o /usr/local/bin/torrserver \
     && chmod +x /usr/local/bin/torrserver \
     && pip3 install --no-cache-dir --break-system-packages pyrogram tgcrypto edge-tts \
+    && apt-get purge -y --auto-remove gcc python3-dev libc6-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /github/workspace
