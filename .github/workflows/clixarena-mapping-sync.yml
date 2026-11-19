@@ -1,0 +1,50 @@
+name: Sync Abyss mappings
+on:
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clixarena-mapping-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Checkout private core repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: ${{ vars.CORE_REPO }}
+          token: ${{ secrets.CORE_PAT }}
+          ref: ${{ vars.CORE_REF || 'main' }}
+          path: _core
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Unpack private core files
+        run: |
+          tar -C _core --exclude=.git --exclude=.github -cf - . | tar -C . -xf -
+          rm -rf _core
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: '3.11'
+      - name: Sync Abyss mappings safely
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAPPING_GITHUB_TOKEN: ${{ secrets.MAPPING_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          MAPPING_PASSWORD: ${{ secrets.MAPPING_PASSWORD }}
+          ABYSS_API_KEY: ${{ secrets.ABYSS_API_KEY }}
+          BYSE_API_KEY: ${{ secrets.BYSE_API_KEY || secrets.FILEMOON_API_KEY }}
+          FILEMOON_API_KEY: ${{ secrets.BYSE_API_KEY || secrets.FILEMOON_API_KEY }}
+          ABYSS_AUTH_TOKEN: ${{ secrets.ABYSS_AUTH_TOKEN }}
+          ABYSS_EMAIL: ${{ secrets.ABYSS_EMAIL }}
+          ABYSS_PASSWORD: ${{ secrets.ABYSS_PASSWORD }}
+        run: python3 -u scripts/clixarena_mapping_sync.py
