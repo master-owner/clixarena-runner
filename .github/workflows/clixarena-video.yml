@@ -21,7 +21,7 @@ on:
         type: string
         required: false
       runner_mode:
-        description: Single runner (direct, fast, no chunk transfer) or Parallel (4 runners)
+        description: Single runner (direct, fast, no chunk transfer) or Parallel (8 runners)
         required: false
         default: single
         type: choice
@@ -156,7 +156,7 @@ jobs:
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ vars.CORE_REF || 'main' }}
+          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
@@ -293,7 +293,7 @@ jobs:
         if: failure()
         run: echo '::error::Check the stage message above. Verify video URL, repository SRT/font paths, UTF-8 SRT, selected language and font support, disk space and the selected upload host secrets. Uploads are not retried automatically; check the selected host account before rerunning.'
   chunks:
-    name: Encode chunk ${{ matrix.chunk }} of four
+    name: Encode chunk ${{ matrix.chunk }} of eight
     needs: encode
     if: ${{ needs.encode.outputs.distributed == 'true' }}
     runs-on: ubuntu-24.04
@@ -307,7 +307,7 @@ jobs:
       contents: read
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 8
       matrix:
         chunk: ${{ fromJSON(needs.encode.outputs.matrix) }}
     steps:
@@ -320,7 +320,7 @@ jobs:
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ vars.CORE_REF || 'main' }}
+          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
@@ -387,7 +387,7 @@ jobs:
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ vars.CORE_REF || 'main' }}
+          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
@@ -455,7 +455,7 @@ jobs:
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ vars.CORE_REF || 'main' }}
+          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
