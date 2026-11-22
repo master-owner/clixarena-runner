@@ -149,14 +149,15 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          fetch-depth: 1
+          ref: ${{ inputs.source_commit || github.ref_name }}
+          fetch-depth: ${{ inputs.source_commit && '0' || '1' }}
           persist-credentials: false
       - name: Checkout private core repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
+          ref: ${{ vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
@@ -313,14 +314,15 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          fetch-depth: 1
+          ref: ${{ inputs.source_commit || github.ref_name }}
+          fetch-depth: ${{ inputs.source_commit && '0' || '1' }}
           persist-credentials: false
       - name: Checkout private core repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
+          ref: ${{ vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
@@ -380,14 +382,15 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          fetch-depth: 1
+          ref: ${{ inputs.source_commit || github.ref_name }}
+          fetch-depth: ${{ inputs.source_commit && '0' || '1' }}
           persist-credentials: false
       - name: Checkout private core repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
+          ref: ${{ vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
@@ -448,14 +451,15 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          fetch-depth: 1
+          ref: ${{ inputs.source_commit || github.ref_name }}
+          fetch-depth: ${{ inputs.source_commit && '0' || '1' }}
           persist-credentials: false
       - name: Checkout private core repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: ${{ vars.CORE_REPO }}
           token: ${{ secrets.CORE_PAT }}
-          ref: ${{ inputs.source_commit || vars.CORE_REF || 'main' }}
+          ref: ${{ vars.CORE_REF || 'main' }}
           path: _core
           fetch-depth: 1
           persist-credentials: false
