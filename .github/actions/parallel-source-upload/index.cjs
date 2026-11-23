@@ -4,7 +4,7 @@ const path = require('node:path');
 
 function plan(raw, workspace) {
   const indices = JSON.parse(raw);
-  if (!Array.isArray(indices) || indices.length < 1 || indices.length > 4 ||
+  if (!Array.isArray(indices) || indices.length < 1 || indices.length > 8 ||
       indices.some((n, i) => !Number.isInteger(n) || n !== i)) {
     throw new Error('Invalid source chunk matrix');
   }
