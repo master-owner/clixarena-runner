@@ -49,8 +49,8 @@ async function main() {
 }
 
 module.exports = {plan, uploadAll, createClient};
-if (require.main === module) main().catch(() => {
-  // Do not emit raw SDK exception bodies, signed endpoints or runtime tokens.
-  console.error('::error::Source artifact upload failed. Workers were not started; check artifact storage quota and GitHub service availability.');
+if (require.main === module) main().catch(err => {
+  console.error('::error::Source artifact upload failed:', err.message || err);
+  if (err.stack) console.error(err.stack);
   process.exitCode = 1;
 });
